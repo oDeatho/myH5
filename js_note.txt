@@ -1,0 +1,131 @@
+1. 数据类型：
+    JS不区分 证书和浮点数.
+    比较运算符有 1> == 他会自动转换数据类型再比较
+                 2> === 他不会转换数据类型, 如果类型不一致 返回false.
+                 所以坚持使用===比较.
+                 
+        NaN这个特殊Number和其他值都不想等, 包括自己.
+        判断Nan的方法是通过isNaN()函数
+    
+    如果一个变量没有通过var生命, 就默认认为是全局变量.
+    为了强制使用var定义变量. 在js代码第一行协商 'use strict'
+    
+    数组
+    new Array(1, 2, 3);
+    var arr = [1, 2, "hello"];
+    arr[6]  undefined
+    
+    数组长度为 arr.length, 可以通过修改这个改变数组长度,
+    var arr = [1, 2, 3];
+    arr[5] = 'x';
+    arr; // arr变为[1, 2, 3, undefined, undefined, 'x']
+    如果越界赋值 也会有奇怪的效果哦(见上)
+    
+    对象:
+    var person = {
+        hello: "hello",
+        "hi": 20,
+    };
+    
+    访问属性是通过.操作符完成的，但这要求属性名必须是一个有效的变量名。如果属性名包含特殊字符，就必须用''括起来：
+
+    var xiaohong = {
+        name: '小红',
+        'middle-school': 'No.1 Middle School'
+    };
+    这个属性使用也只能通过[''] 而不能通过. 来使用.
+    
+
+    
+    多行字符串用反引号 `可以换行`
+    
+    以及模板字符串格式化, 这里必须要使用反引号哦
+    var name = "hello"
+    var age = 20;
+    var message = `hello , ${name}, ${age}`;
+
+    MAP和SET
+    但是JavaScript的对象有个小问题，就是键必须是字符串。但实际上Number或者其他数据类型作为键也是非常合理的。
+    为了解决这个问题，最新的ES6规范引入了新的数据类型Map。
+    
+    var m = new Map([['Michael', 95], ['Bob', 75], ['Tracy', 85]]);
+    m.get('Michael'); // 95
+    初始化Map需要一个二维数组，或者直接初始化一个空Map。Map具有以下方法：
+
+    var m = new Map(); // 空Map
+    m.set('Adam', 67); // 添加新的key-value
+    m.set('Bob', 59);
+    m.has('Adam'); // 是否存在key 'Adam': true
+    m.get('Adam'); // 67
+    m.delete('Adam'); // 删除key 'Adam'
+    m.get('Adam'); // undefined
+    
+    
+    要创建一个Set，需要提供一个Array作为输入，或者直接创建一个空Set：
+
+    var s1 = new Set(); // 空Set
+    var s2 = new Set([1, 2, 3]); // 含1, 2, 3
+    重复元素在Set中自动被过滤：
+
+    var s = new Set([1, 2, 3, 3, '3']);
+    s; // Set {1, 2, 3, "3"}
+    注意数字3和字符串'3'是不同的元素。
+    
+    
+    遍历Array可以采用下标循环，遍历Map和Set就无法使用下标。为了统一集合类型，ES6标准引入了新的iterable类型，Array、Map和Set都属于iterable类型。
+
+    具有iterable类型的集合可以通过新的for ... of循环来遍历。
+    
+2. 控制流
+   if else 同C
+   
+   循环:
+   for 循环 有两种, 
+   var x = 0;
+   var i;
+   for (i = 1; i <= 1000; i++){
+       x = x + 1;
+   }
+   这种也可以写成C++的样子.(在括号内定义i)
+   另一种 for in
+   var o = {
+       name: 'Jack',
+       age: 20,
+       city: 'Beijing'
+   };
+   for (var key in o) {
+       console.log(key); // 'name', 'age', 'city'
+   }
+   这种可以类似python的方式 只是加上括号
+   而且 for in 数组时, 循环得到的是String类型而不是Number,
+   而且for in 由于历史遗留问题, 他遍历的实际上市对象的属性名称.
+   for of 修复了该问题.
+   
+   还有for of 具有iterable的类型可以通过for..of来遍历
+   
+   但是最好用iterable内置的forEach方法.
+   
+   while循环 同C
+   do while 同C;
+   
+3. 函数
+    1> 定义 function abs(x){
+                if (x >= 0){
+                    return x;
+                {
+                return -x;
+            }
+    如果没有return, 返回结果为undefined.
+    而且也可以
+    var abs = function (x) {
+        if (x >= 0) {
+            return x;
+        } else {
+            return -x;
+        }
+    };
+    (ps: 这里要加分号表示复制语句结束).
+    
+    JS 允许传入任意个参数不影响调用.
+    关键字arguments, 只在函数内部起作用, 永远指向当前函数的调用者传入的所有参数.
+    
