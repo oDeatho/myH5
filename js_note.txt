@@ -129,3 +129,66 @@
     JS 允许传入任意个参数不影响调用.
     关键字arguments, 只在函数内部起作用, 永远指向当前函数的调用者传入的所有参数.
     
+    为了获取额外的参数
+    ES6标准引入了rest参数,
+    eg:
+    
+    function foo(a, b, ...rest) {
+        console.log('a = ' + a);
+        console.log('b = ' + b);
+        console.log(rest);
+    }
+
+    foo(1, 2, 3, 4, 5);
+    // 结果:
+    // a = 1
+    // b = 2
+    // Array [ 3, 4, 5 ]
+
+    foo(1);
+    // 结果:
+    // a = 1
+    // b = undefined
+    // Array []
+    
+    小心return语句
+    JS引擎会在航模添加分好的机制, 这可能有坑.
+    return { hello: "hello"};
+    和
+    return 
+        {hello: "hello"};
+    不一样哦!
+    所以多行的正确写法是
+    return {
+        hello: "hello";
+    }
+    
+    2> 变量提升
+    JavaScript的函数定义有个特点，它会先扫描整个函数体的语句，把所有申明的变量“提升”到函数顶部
+    但只是提升声明, 并不提升赋值.
+    所以需要严格遵守 "在函数内部首先申明所有变量"
+    
+    3> 全局作用域
+    不在任何函数内定义的变量具有全局作用域, js默认有一个全局对象 window
+    所以函数实际上也是一个全局变量.
+    fun()和window.fun() 相同哟.
+    
+    4> 名字空间
+    减少冲突的一个方法就是把 所有的变量和函数全部绑定到一个全局变量.
+    
+    5> 局部作用域
+    js的变量作用域实际上是函数内部, 所以在for循环中无法定义块的作用域
+    
+    ES6引入了新的关键字 let来解决此问题.
+    'use strict';
+
+    function foo() {
+        var sum = 0;
+        for (let i=0; i<100; i++) {
+            sum += i;
+        }
+        // SyntaxError:
+        i += 1;
+    }
+    
+    6> 常量
