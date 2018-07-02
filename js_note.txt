@@ -98,7 +98,7 @@
    }
    这种可以类似python的方式 只是加上括号
    而且 for in 数组时, 循环得到的是String类型而不是Number,
-   而且for in 由于历史遗留问题, 他遍历的实际上市对象的属性名称.
+   而且for in 由于历史遗留问题, 他遍历的实际上是对象的属性名称.
    for of 修复了该问题.
    
    还有for of 具有iterable的类型可以通过for..of来遍历
@@ -124,7 +124,7 @@
             return -x;
         }
     };
-    (ps: 这里要加分号表示复制语句结束).
+    (ps: 这里要加分号表示赋值语句结束).
     
     JS 允许传入任意个参数不影响调用.
     关键字arguments, 只在函数内部起作用, 永远指向当前函数的调用者传入的所有参数.
@@ -152,7 +152,7 @@
     // Array []
     
     小心return语句
-    JS引擎会在航模添加分好的机制, 这可能有坑.
+    JS引擎会在行末添加分号的机制, 这可能有坑.
     return { hello: "hello"};
     和
     return 
@@ -206,7 +206,8 @@
     7> 解构赋值
     var [x, y, z] = ['hello', 'JavaScript', 'ES6'];
     
-    使用解构赋值对对象属性进行赋值时，如果对应的属性不存在，变量将被赋值为undefined，这和引用一个不存在的属性获得undefined是一致的。如果要使用的变量名和属性名不一致，可以用下面的语法获取：
+    使用解构赋值对对象属性进行赋值时，如果对应的属性不存在，变量将被赋值为undefined，这和引用一个不存在的属性获得undefined是一致的。
+    如果要使用的变量名和属性名不一致，可以用下面的语法获取：
 
     var person = {
         name: '小明',
@@ -217,7 +218,7 @@
     };
 
     // 把passport属性赋值给变量id:
-    let {name, passport:id} = person;
+    let {name, passport, id} = person;
     name; // '小明'
     id; // 'G-12345678'
     // 注意: passport不是变量，而是为了让变量id获得passport属性:
@@ -272,6 +273,12 @@
 
 5. 闭包
     同python
+    理论上讲，创建一个匿名函数并立刻执行可以这么写：
+
+    function (x) { return x * x } (3);
+    但是由于JavaScript语法解析的问题，会报SyntaxError错误，因此需要用括号把整个函数定义括起来：
+
+    (function (x) { return x * x }) (3);
 
 6. 箭头函数
     x => x * x
