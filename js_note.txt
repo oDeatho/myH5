@@ -478,3 +478,228 @@ alert(book.edition); //2
     要忘了它是从Object 继承来的）只在给定属性存在于对象实例中时，才会返回true。
     
     原型与in操作符
+    
+    要取得对象上所有可枚举的实例属性，可以使用ECMAScript 5 的Object.keys()方法。这个方法
+    接收一个对象作为参数，返回一个包含所有可枚举属性的字符串数组。例如：
+    function Person(){
+    }
+    Person.prototype.name = "Nicholas";
+    Person.prototype.age = 29;
+    Person.prototype.job = "Software Engineer";
+    Person.prototype.sayName = function(){
+        alert(this.name);
+    };
+    var keys = Object.keys(Person.prototype);
+    alert(keys); //"name,age,job,sayName"
+    var p1 = new Person();
+    p1.name = "Rob";
+    p1.age = 31;
+    var p1keys = Object.keys(p1);
+    alert(p1keys); //"name,age"
+    
+    更简单的原型语法
+    读者大概注意到了，前面例子中每添加一个属性和方法就要敲一遍Person.prototype。为减少
+    不必要的输入，也为了从视觉上更好地封装原型的功能，更常见的做法是用一个包含所有属性和方法的
+    对象字面量来重写整个原型对象，如下面的例子所示。
+    function Person(){
+    }
+    Person.prototype = {
+        name : "Nicholas",
+        age : 29,
+        job: "Software Engineer",
+        sayName : function () {
+            alert(this.name);
+        }
+    };
+    
+    尽管可以随时为原型添加属性和方法，并且修改能够立即在所有对象实例中反映出来，但如果是重
+    写整个原型对象，那么情况就不一样了。我们知道，调用构造函数时会为实例添加一个指向最初原型的
+    [[Prototype]]指针，而把原型修改为另外一个对象就等于切断了构造函数与最初原型之间的联系。
+    请记住：实例中的指针仅指向原型，而不指向构造函数。看下面的例子。
+    function Person(){
+    }
+    var friend = new Person();
+    Person.prototype = {
+        constructor: Person,
+        name : "Nicholas",
+        age : 29,
+        job : "Software Engineer",
+        sayName : function () {
+            alert(this.name);
+        }
+    };
+    friend.sayName(); //error
+    
+    
+    组合使用构造函数模式和原型模式
+    function Person(name, age, job){
+        this.name = name;
+        this.age = age;
+        this.job = job;
+        this.friends = ["Shelby", "Court"];
+    }
+    Person.prototype = {
+        constructor : Person,
+        sayName : function(){
+            alert(this.name);
+        }
+    }
+    var person1 = new Person("Nicholas", 29, "Software Engineer");
+    var person2 = new Person("Greg", 27, "Doctor");
+    person1.friends.push("Van");
+    alert(person1.friends); //"Shelby,Count,Van"
+    alert(person2.friends); //"Shelby,Count"
+    alert(person1.friends === person2.friends); //false
+    alert(person1.sayName === person2.sayName); //true
+    
+    
+    稳妥构造函数模式
+    function Person(name, age, job){
+        //创建要返回的对象
+        var o = new Object();//可以在这里定义私有变量和函数
+        //添加方法
+        o.sayName = function(){
+        alert(name);
+        };
+        //返回对象
+        return o;
+    }
+    
+        注意，在以这种模式创建的对象中，除了使用sayName()方法之外，没有其他办法访问name 的值。
+    可以像下面使用稳妥的Person 构造函数。
+
+    var friend = Person("Nicholas", 29, "Software Engineer");
+    friend.sayName(); //"Nicholas"
+    
+    
+9. 继承:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+10. DOM
+    windows 对像
+
+    alert()告警
+    confirm() 有ok和cancel
+    可以检查confirm()方法返回的布尔值：true 表示单击了OK，false 表示单击了Cancel 或单击了右上角的X 按钮
+    if (confirm("Are you sure?")) {
+        alert("I'm so glad you're sure! ");
+    } else {
+        alert("I'm sorry to hear you're not sure. ");
+    }
+    prompt()
+    显示文本输入域
+    var result = prompt("What is your name? ", "");
+    if (result !== null) {
+        alert("Welcome, " + result);
+    }
+    
+    //显示“打印”对话框
+    window.print();
+    //显示“查找”对话框
+    window.find();
+    
+    location 对象
+    location.assign("http://www.baidu.com");
+    等同于
+    window.location = "http://www.baidu.com";
+    location.href = "http://www.baidu.com";
+    修改location 对象的其他属性也可以改变当前加载的页面。下面的例子展示了通过将hash、search、hostname、pathname 和port 属性设置为新值来改变URL。
+    
+    //假设初始URL 为http://www.wrox.com/WileyCDA/
+    //将URL 修改为"http://www.wrox.com/WileyCDA/#section1"
+    location.hash = "#section1";
+    //将URL 修改为"http://www.wrox.com/WileyCDA/?q=javascript"
+    location.search = "?q=javascript";
+    //将URL 修改为"http://www.yahoo.com/WileyCDA/"
+    location.hostname = "www.yahoo.com";
+    //将URL 修改为"http://www.yahoo.com/mydir/"
+    location.pathname = "mydir";
+    //将URL 修改为"http://www.yahoo.com:8080/WileyCDA/"
+    location.port = 8080;
+    
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>You won't be able to get back here</title>
+    </head>
+    <body>
+    <p>Enjoy this page for a second, because you won't be coming back here.</p>
+        <script type="text/javascript">
+            setTimeout(function () {
+                location.replace("http://www.baidu.com/");
+            }, 1000);
+        </script>
+    </body>
+    </html>
+    
+    location.reload(); //重新加载（有可能从缓存中加载）
+    location.reload(true); //重新加载（从服务器重新加载）
+    
+    navigator 对象
+    检测插件
+    检测浏览器中是否安装了特定的插件是一种最常见的检测例程。对于非IE 浏览器，可以使用plugins 数组来达到这个目的。该数组中的每一项都包含下列属性。
+    name：插件的名字。
+    description：插件的描述。
+    filename：插件的文件名。
+    length：插件所处理的MIME 类型数量。
+    
+    //检测插件（在IE 中无效）
+    function hasPlugin(name){
+        name = name.toLowerCase();
+            for (var i=0; i < navigator.plugins.length; i++){
+                if (navigator.plugins[i].name.toLowerCase().indexOf(name) > -1){
+                    return true;
+            }
+        }
+        return false;
+    }
+    //检测Flash
+    alert(hasPlugin("Flash"));
+    //检测QuickTime
+    alert(hasPlugin("QuickTime"));
+    
+    
+    检测插件
+    检测浏览器中是否安装了特定的插件是一种最常见的检测例程。对于非IE 浏览器，可以使用
+plugins 数组来达到这个目的。该数组中的每一项都包含下列属性。
+ name：插件的名字。
+ description：插件的描述。
+ filename：插件的文件名。
+ length：插件所处理的MIME 类型数量。
+
+    function hasPlugin(name){
+        name = name.toLowerCase();
+        for (var i=0; i < navigator.plugins.length; i++){
+            if (navigator. plugins [i].name.toLowerCase().indexOf(name) > -1){
+                return true;
+            }
+        }
+        return false;
+    }
+    //检测Flash
+    alert(hasPlugin("Flash"));
+    //检测QuickTime
+    alert(hasPlugin("QuickTime"));
+    
+    3. 查找元素
+说到最常见的DOM 应用，恐怕就要数取得特定的某个或某组元素的引用，然后再执行一些操作了。
+取得元素的操作可以使用document 对象的几个方法来完成。其中，Document 类型为此提供了两个方
+法：getElementById()和getElementsByTagName()。
